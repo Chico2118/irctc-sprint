@@ -185,3 +185,190 @@ The system fails to consistently communicate that the selected berth preference 
 The issue does not prevent ticket booking but directly affects user trust and perceived reliability of the booking experience.
 
 ---
+
+## Problem 4: Captcha Reload Loop During Login [Self-Discovered]
+
+### How I Found It
+
+While testing the login flow and repeatedly attempting authentication on the IRCTC website, I noticed that captcha challenges frequently refresh after failed submissions or page reloads. This forces users to repeatedly solve new captchas before they can continue.
+
+### What is broken
+
+The login flow depends heavily on captcha verification, but captcha images often refresh unexpectedly after login failures, session refreshes, or validation errors. Users must repeatedly re-enter captcha values, increasing friction during authentication.
+
+### Affected users
+
+* Elderly users
+* Users with visual impairments
+* Mobile users
+* Users with slow internet connections
+* Users attempting multiple login attempts
+
+### Frequency
+
+* Common during login attempts
+* More noticeable when users enter incorrect credentials or encounter session timeouts
+* Occurs throughout the day
+
+### Current Flow — Step by Step
+
+1. User opens the IRCTC login page.
+2. User enters username.
+3. User enters password.
+4. User reads and enters captcha text.
+5. User clicks Sign In.
+6. Authentication request is submitted.
+7. Login fails due to incorrect credentials, timeout, or validation error.
+8. Captcha automatically refreshes.
+9. User must solve a new captcha.
+10. User repeats the login process.
+11. Multiple failed attempts increase frustration.
+12. User may abandon the session.
+
+### Where Exactly It Breaks
+
+**Step 7–8.**
+
+The captcha state is discarded immediately after a failed login attempt. Instead of helping users recover from errors, the system increases effort by requiring a completely new captcha challenge each time.
+
+### User Impact
+
+* Increased login time
+* Higher authentication friction
+* Poor accessibility
+* Greater likelihood of login abandonment
+* Frustration for less technical users
+
+### Screenshot
+
+`assets/screenshots/problem4-captcha.png`
+
+### Severity
+
+**Medium**
+
+The issue does not block access entirely but creates unnecessary friction at the very beginning of the user journey.
+
+---
+## Problem 5: PNR Status Information Is Difficult To Interpret [Self-Discovered]
+
+### How I Found It
+
+While exploring the PNR enquiry section and checking booking status information, I observed that several railway status codes are displayed without sufficient explanations for first-time users.
+
+### What is broken
+
+PNR results display abbreviations such as WL, RAC, GNWL, RLWL, PQWL, and CNF. While these codes are familiar to experienced railway travelers, many passengers do not understand their meaning or likelihood of confirmation.
+
+### Affected users
+
+* First-time train passengers
+* Infrequent travelers
+* Senior citizens
+* International tourists
+* Users unfamiliar with railway terminology
+
+### Frequency
+
+* Every time a user checks PNR status
+* Particularly impactful for waitlisted passengers
+
+### Current Flow — Step by Step
+
+1. User opens the PNR Status page.
+2. User enters PNR number.
+3. User submits the enquiry.
+4. Booking status appears.
+5. Railway abbreviations are displayed.
+6. User does not understand the codes.
+7. User searches Google or YouTube for explanations.
+8. User returns to IRCTC.
+9. User continues the booking journey with incomplete understanding.
+
+### Where Exactly It Breaks
+
+**Step 5–6.**
+
+The system provides raw railway terminology without contextual explanations, tooltips, or prediction guidance. Users are expected to understand railway-specific abbreviations on their own.
+
+### User Impact
+
+* Confusion regarding booking status
+* Increased dependency on external websites
+* Reduced confidence in travel planning
+* Poor information accessibility
+
+### Screenshot
+
+`assets/screenshots/problem5-pnr.png`
+
+### Severity
+
+**Medium–High**
+
+The issue affects a critical information page and directly impacts decision-making for passengers with waitlisted tickets.
+
+---
+## Problem 6: Mobile Booking Flow Requires Excessive Scrolling [Self-Discovered]
+
+### How I Found It
+
+While testing the train booking process on a mobile browser, I observed that the passenger details page requires extensive scrolling before users can complete a booking.
+
+### What is broken
+
+The mobile booking experience presents a long, single-page form containing passenger information, berth preferences, contact details, concessions, and additional options. Users must scroll repeatedly to complete the booking process.
+
+### Affected users
+
+* Mobile users
+* Senior citizens
+* One-handed users
+* Passengers booking multiple tickets
+* Users with smaller screen devices
+
+### Frequency
+
+* Every mobile booking session
+* More noticeable when booking for multiple passengers
+
+### Current Flow — Step by Step
+
+1. User searches for a train on mobile.
+2. User selects a train and quota.
+3. User clicks Book Now.
+4. Passenger Details page loads.
+5. User enters passenger name.
+6. User enters age and gender.
+7. User selects berth preferences.
+8. User enters contact information.
+9. User continues scrolling to locate remaining fields.
+10. Important options appear below the fold.
+11. User misses a required field.
+12. Validation errors appear and the user must scroll again to correct them.
+
+### Where Exactly It Breaks
+
+**Step 9–12.**
+
+The form structure creates excessive scrolling and poor visibility of important fields. Validation feedback often requires users to navigate back through a lengthy page to identify missing information.
+
+### User Impact
+
+* Longer booking completion times
+* Increased form errors
+* Higher abandonment rates
+* Reduced usability on mobile devices
+* Frustrating experience for users booking under time pressure
+
+### Screenshot
+
+`assets/screenshots/problem6-mobile-form.png`
+
+### Severity
+
+**High**
+
+Mobile devices account for a significant portion of IRCTC traffic, making inefficient form design a high-impact usability issue.
+
+---
