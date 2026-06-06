@@ -132,3 +132,285 @@ The system automatically saves active filters during a search session. When user
 
 ![Persistent Filters](../assets/wireframes/filters-persist.png)
 
+---
+
+# Feature Spec 3: Berth Preference Lock System
+
+### Problem Statement
+
+Part A identified that berth preferences selected by users are not consistently retained throughout the booking flow. Users are often unsure whether their Lower Berth, Upper Berth, or Side Lower preference has actually been saved, reducing trust in the booking experience.
+
+### Current State (from Part A)
+
+The issue occurs between the Passenger Details page and the Review Journey page. Users select a berth preference, but the preference may disappear or is not clearly visible on subsequent screens.
+
+### Proposed Solution
+
+The system visibly locks and confirms berth preferences immediately after selection. Users receive a clear confirmation message that their preference has been saved and will be considered during seat allocation.
+
+### Proposed User Flow
+
+1. User enters passenger details.
+2. User selects berth preference.
+3. System saves preference instantly.
+4. Confirmation message appears.
+5. User proceeds to review page.
+6. Preference remains visible throughout booking.
+7. Ticket confirmation includes berth preference record.
+
+### Technical Implementation Plan
+
+**System Components Affected**
+
+* Passenger Details Module
+* Booking API
+* Ticket Review Screen
+
+**New Data Requirements**
+
+* Berth Preference Status
+* Preference Timestamp
+
+**API Changes**
+
+* PATCH /booking/berth-preference
+* GET /booking/preferences
+
+**Frontend Changes**
+
+* Saved Preference Badge
+* Confirmation Banner
+* Preference Summary Card
+
+**Third Party Services**
+
+* None
+
+### Success Metrics
+
+* Reduce berth-related complaints by 50%
+* Increase booking confidence score
+* Reduce review-page back navigation
+
+### Edge Cases and Constraints
+
+* Multiple passengers with different preferences
+* Preference unavailable due to train occupancy
+* Auto-upgradation conflicts
+* Graceful fallback when berth preference cannot be honored
+
+### Wireframe
+
+![Berth Lock](../assets/wireframes/berth-lock.png)
+
+---
+
+# Feature Spec 4: Smart Captcha Recovery
+
+### Problem Statement
+
+Part A identified that users must repeatedly solve new captchas after login failures. This creates unnecessary friction and increases login abandonment.
+
+### Current State (from Part A)
+
+The captcha refreshes immediately after failed login attempts, forcing users to repeatedly solve new challenges.
+
+### Proposed Solution
+
+Allow users up to three attempts before forcing a captcha refresh. Add a manual refresh option and attempt counter to improve recovery from login errors.
+
+### Proposed User Flow
+
+1. User enters username and password.
+2. User enters captcha.
+3. Login fails.
+4. Existing captcha remains active.
+5. User retries authentication.
+6. Attempt counter updates.
+7. New captcha appears only after maximum attempts.
+
+### Technical Implementation Plan
+
+**System Components Affected**
+
+* Login Service
+* Authentication API
+* Captcha Service
+
+**New Data Requirements**
+
+* Captcha Attempt Count
+* Session Tracking Data
+
+**API Changes**
+
+* POST /auth/login
+* GET /captcha/refresh
+
+**Frontend Changes**
+
+* Attempt Counter
+* Manual Refresh Button
+* Error Recovery Messaging
+
+**Third Party Services**
+
+* Existing Captcha Provider
+
+### Success Metrics
+
+* Reduce login abandonment by 30%
+* Improve login completion rate
+* Reduce unnecessary captcha refreshes
+
+### Edge Cases and Constraints
+
+* Brute-force attack prevention
+* Session expiration
+* Shared computer environments
+* Captcha service downtime
+
+### Wireframe
+
+![Captcha Recovery](../assets/wireframes/captcha-recovery.png)
+
+---
+
+# Feature Spec 5: PNR Status Explanation Panel
+
+### Problem Statement
+
+Part A identified that railway abbreviations such as WL, RAC, GNWL, and RLWL are difficult for many users to understand. This forces users to leave IRCTC and search external sources.
+
+### Current State (from Part A)
+
+PNR status pages display technical railway codes without sufficient contextual explanation or guidance.
+
+### Proposed Solution
+
+Add a smart explanation panel that converts railway terminology into plain language and provides helpful travel guidance.
+
+### Proposed User Flow
+
+1. User enters PNR number.
+2. PNR status loads.
+3. System detects status code.
+4. Explanation panel appears.
+5. Meaning is displayed in simple language.
+6. User understands status immediately.
+7. User remains within IRCTC ecosystem.
+
+### Technical Implementation Plan
+
+**System Components Affected**
+
+* PNR Module
+* Railway Status API
+* User Interface Layer
+
+**New Data Requirements**
+
+* Status Dictionary Database
+* Explanation Metadata
+
+**API Changes**
+
+* GET /pnr/explanation
+
+**Frontend Changes**
+
+* Status Explanation Card
+* Tooltip Support
+* Confirmation Probability Widget
+
+**Third Party Services**
+
+* Optional Prediction Engine
+
+### Success Metrics
+
+* Reduce external help searches
+* Increase PNR page engagement
+* Improve user comprehension scores
+
+### Edge Cases and Constraints
+
+* Rare railway status codes
+* Missing status information
+* API response delays
+* Multi-language support requirements
+
+### Wireframe
+
+![PNR Helper](../assets/wireframes/pnr-helper.png)
+
+---
+
+# Feature Spec 6: Multi-Step Mobile Booking Form
+
+### Problem Statement
+
+Part A identified that the mobile booking form requires excessive scrolling and contains too many fields on a single page. This increases form errors and booking abandonment.
+
+### Current State (from Part A)
+
+Users complete a long single-page form containing passenger details, preferences, and contact information before proceeding.
+
+### Proposed Solution
+
+Break the booking process into four smaller steps with a visible progress indicator and automatic draft saving.
+
+### Proposed User Flow
+
+1. User opens booking form.
+2. Step 1: Passenger Information.
+3. Step 2: Contact Information.
+4. Step 3: Travel Preferences.
+5. Step 4: Review and Confirm.
+6. Progress indicator updates after each step.
+7. Booking is completed successfully.
+
+### Technical Implementation Plan
+
+**System Components Affected**
+
+* Mobile Frontend
+* Booking API
+* Session Storage
+
+**New Data Requirements**
+
+* Step Progress State
+* Draft Booking Data
+
+**API Changes**
+
+* POST /booking/save-draft
+* GET /booking/draft
+
+**Frontend Changes**
+
+* Multi-Step Form Layout
+* Progress Tracker
+* Auto Save Mechanism
+
+**Third Party Services**
+
+* None
+
+### Success Metrics
+
+* Reduce form abandonment by 40%
+* Reduce validation errors
+* Increase mobile booking completion rate
+
+### Edge Cases and Constraints
+
+* User closes browser mid-booking
+* Network interruptions
+* Draft expiration
+* Multiple passenger bookings
+
+### Wireframe
+
+![Mobile Step Form](../assets/wireframes/mobile-step-form.png)
