@@ -66,3 +66,69 @@ Instead of everyone competing at once, users enter a virtual queue before bookin
 - Network disconnect
 - Queue timeout
 - Duplicate sessions
+
+---
+
+# Feature Spec 2: Persistent Smart Filters
+
+### Problem Statement
+
+Part A identified that search filters such as Sleeper Class, Available Seats Only, and Departure Time frequently reset when users navigate away from search results. This forces users to repeatedly reapply filters and slows train discovery.
+
+### Current State (from Part A)
+
+The failure occurs when users open train details and return to search results. Previously selected filters are lost or applied inconsistently.
+
+### Proposed Solution
+
+The system automatically saves active filters during a search session. When users return to the search page, all selected filters remain applied and visible.
+
+### Proposed User Flow
+
+1. User searches trains.
+2. User applies filters.
+3. Filters are automatically saved.
+4. User opens train details.
+5. User returns to search results.
+6. Previously selected filters remain active.
+7. User continues browsing without reapplying filters.
+
+### Technical Implementation Plan
+
+**System Components Affected**
+- Search Frontend
+- Search API
+- Session Storage
+
+**New Data Requirements**
+- Filter Preferences
+- Session ID
+
+**API Changes**
+- GET /search/preferences
+- POST /search/preferences
+
+**Frontend Changes**
+- Filter Persistence
+- Saved Filter Chips
+- Restore Search State
+
+**Third Party Services**
+- None
+
+### Success Metrics
+
+- Reduce filter reapplication rate by 80%
+- Improve train search completion rate
+- Reduce search abandonment
+
+### Edge Cases
+
+- Browser refresh
+- Session expiration
+- Shared devices
+
+### Wireframe
+
+![Persistent Filters](../assets/wireframes/filters-persist.png)
+
